@@ -1,5 +1,5 @@
 {
-  "name": "atendimento",
+  "name": "atendimento-backend",
   "version": "1.0.0",
   "description": "Projeto de atendimento de uma clínica com serviços e pagamentos",
   "main": "index.js",
