@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt-nodejs')
 module.exports = app => {
 
     const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
+    const { signIn } = app.api.auth
 
     const encryptPassword = (password) => {
         const salt = bcrypt.genSaltSync(10)
@@ -11,9 +12,7 @@ module.exports = app => {
     }
 
     const save = async (req, res) => {
-
         const customer = { ...req.body }
-        console.log(customer)
         if (req.params.id) customer.id = req.params.id  //Para rota de Edição
 
         try {
@@ -23,6 +22,7 @@ module.exports = app => {
             existsOrError(customer.confirmPassword, 'Confirmação de senha não informada')
             equalsOrError(customer.password, customer.confirmPassword, 'Senhas não conferem')
 
+            
             const customerFromDB = await app.db('customers')
                 .where({ email: customer.email }).first()
 
@@ -37,7 +37,6 @@ module.exports = app => {
         customer.password = encryptPassword(req.body.password)
         delete customer.confirmPassword
 
-        console.log(customer)
         //Edição
         if (customer.id) {
             app.db('customers')
@@ -50,7 +49,7 @@ module.exports = app => {
         else {
             app.db('customers')
                 .insert(customer)
-                .then(() => res.status(204).send())
+                .then(() => signIn(req, res))
                 .catch(err => console.log(err))
         }
     }

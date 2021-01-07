@@ -9,17 +9,15 @@ module.exports = app => {
         if( !req.body.email || !req.body.password ){
             return res.status(400).send('Informe cliente ou senha!')
         }
-
         const customer = await app.db('customers')
             .where({ email: req.body.email })
             .first()
-        
-        if( !customer ) return res.status(400).send('CLIENTE NÃO ENCONTRADO!')
+
+        if( !customer ) return res.status(400).send('Cliente não cadastrado!')
 
         const isMatch = bcrypt.compareSync(req.body.password, customer.password)
 
         if (!isMatch) return res.status(401).send('Senha inválida!')
-
 
         const now = Math.floor(Date.now() / 1000)
 
@@ -31,12 +29,14 @@ module.exports = app => {
             exp: now + (60 * 60 * 24) 
         }
 
+
         res.json({
             ...payload,
             token: jwt.encode(payload, authSecret)
         })
 
     }
+
     const validateToken = async (req, res) => {
         const customerData = req.body || null
         try {

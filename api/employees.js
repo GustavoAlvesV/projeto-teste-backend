@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt-nodejs')
-
 
 module.exports = app => {
     
@@ -7,16 +5,15 @@ module.exports = app => {
 
 
     const save = async ( req, res ) => {
+        
         const employee = {...req.body}
-
-
         if(req.params.id) employee.id = req.params.id  //Para rota de Edição
 
         try{
             existsOrError(employee.name, 'Nome não informado')
             existsOrError(employee.email, 'Email não informado')
 
-            const employeeFromDB = await app.db('employee')
+            const employeeFromDB = await app.db('employees')
                 .where({ email: employee.email }).first()
 
             if(!employee.id){ 
@@ -26,7 +23,6 @@ module.exports = app => {
         }catch(msg){
             return res.status(400).send(msg)
         }
-
         //Edição
         if(employee.id){
             app.db('employees')

@@ -15,10 +15,7 @@ module.exports = app => {
         //.all(app.config.passport.authenticate())
         .get(app.api.customer.getById)
         .put(app.api.customer.save)
-        .delete(app.api.customer.remove)
-
-
-        
+        .delete(app.api.customer.remove)  
 
     app.route('/employees')
         //.all(app.config.passport.authenticate())
@@ -31,9 +28,6 @@ module.exports = app => {
         .put(app.api.employees.save)
         .delete(app.api.employees.remove)
 
-
-
-
     app.route('/services')
         //.all(app.config.passport.authenticate())
         .get(app.api.services.get)
@@ -44,11 +38,7 @@ module.exports = app => {
         .get(app.api.services.getById)
         .put(app.api.services.save)
         .delete(app.api.services.remove)
-
-
-
-
-
+        
     app.route('/invoices')
         //.all(app.config.passport.authenticate())
         .get(app.api.Invoices.invoices.get)
